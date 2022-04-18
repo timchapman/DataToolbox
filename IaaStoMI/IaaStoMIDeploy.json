@@ -26,7 +26,6 @@
 		},
 		"MIAdminLoginPassword": {
 			"type": "secureString",
-			"defaultValue": "JesusFuckingChrist99!!",
 			"minLength": 16,
 			"metadata": {
 				"description": "Enter the password for the Managed Instance admin user."
