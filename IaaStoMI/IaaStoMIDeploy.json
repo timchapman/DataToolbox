@@ -61,7 +61,7 @@
 		"subnetPrefix": "10.0.0.0/24",
 		"subnetName": "sqliaassubnet1",
 		"SQLVirtualMachineSize": "Standard_D8s_v3",
-		"MIInstanceName": "sqlmidmstest",
+		"MIInstanceName": "[toLower(concat('sqlmidms','_',variables('uniquesuffix')))]",
 		"MIlocation": "[resourceGroup().location]",
 		"MIvirtualNetworkName":"SQLMI-VNET",
 		"MIaddressPrefix": "10.0.0.0/16"
@@ -124,7 +124,7 @@
 							"type": "Microsoft.Network/virtualNetworks",
 							"apiVersion": "2020-06-01",
 							"name": "[variables('vnetName')]",
-							"location": "[parameters('location')]",
+							"location": "[variables('rgLocation')]",
 							"properties": {
 								"addressSpace": {
 									"addressPrefixes": [
