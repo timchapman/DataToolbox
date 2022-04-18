@@ -3,12 +3,6 @@
 	"$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"location": {
-			"type": "string",
-			"metadata": {
-				"description": "Choose the Azure region that's right for you and your customers. Not every resource is available in every region."
-			}
-		},
 		"SQLVMAdminUsername": {
 			"type": "String",
 			"defaultValue": "sqladmin",
@@ -41,8 +35,8 @@
 	},
 	"variables": {
 		"uniquesuffix": "[uniqueString(guid(subscription().subscriptionId),subscription().subscriptionId, guid(subscription().subscriptionId))]",
-		"rgLocation": "eastus",
-		"rgName":  "timchapdms3",
+		"rgLocation": ["parameters('location')"],
+		"rgName":  "sqlIaaStoMIRG",
 		//"MIrgLocation":  "[resourceGroup().location]",
 		"MIrgName": "[toLower(concat('sqlmirg','-',variables('uniquesuffix')))]",
 		"virtualMachineName": "[toLower(concat('sqlvm','-',variables('uniquesuffix')))]",
