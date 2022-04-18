@@ -264,7 +264,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "MIRGObjects",
-			"location": "[variables('MIlocation')]",
+			//"location": "[variables('MIlocation')]",
 			"properties": {
 				"mode": "Incremental",
 				"template": {
