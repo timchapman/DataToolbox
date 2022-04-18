@@ -271,7 +271,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "MIRGObjects",
-			//"location": "[variables('rgLocation')]",
 			"properties": {
 				"mode": "Incremental",
 				"template": {
@@ -283,13 +282,11 @@
 		{
 			"type": "Microsoft.Resources/resourceGroups",
 			"apiVersion": "2018-05-01",
-			//"location": "[variables('rgLocation')]",
 			"name": "[variables('MIrgName')]"
 		},
 						{
 							"type": "Microsoft.Resources/deployments",
 							"name": "MIDeploy",
-							//"location": "[variables('rgLocation')]",
 							//"dependsOn": [
 							//	"[resourceId('Microsoft.Resources/resourceGroups', variables('MIrgName'))]"
 							//],
