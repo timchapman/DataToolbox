@@ -3,7 +3,7 @@
 	"$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"region": {
+		"location": {
 			"type": "string",
 			"metadata": {
 				"description": "Choose the Azure region that's right for you and your customers. Not every resource is available in every region."
