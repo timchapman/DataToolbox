@@ -3,7 +3,12 @@
 	"$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-	
+		"region": {
+			"type": "string",
+			"metadata": {
+				"description": "Choose the Azure region that's right for you and your customers. Not every resource is available in every region."
+			}
+		},
 		"SQLVMAdminUsername": {
 			"type": "String",
 			"defaultValue": "sqladmin",
@@ -13,7 +18,7 @@
 		},
 		"SQLVMAdminPassword": {
 			"type": "SecureString",
-			"defaultValue": "Password12345!!",
+			"defaultValue": "[subscriptionResourceId().]",
 			"metadata": {
 				"description": "The admin password of the VM"
 			}
@@ -39,7 +44,7 @@
 		"rgLocation": "eastus",
 		"rgName":  "timchapdms3",
 		//"MIrgLocation":  "[resourceGroup().location]",
-		"MIrgName": "[toLower(concat('mirg','-',variables('uniquesuffix')))]",
+		"MIrgName": "[toLower(concat('sqlmirg','-',variables('uniquesuffix')))]",
 		"virtualMachineName": "[toLower(concat('sqlvm','-',variables('uniquesuffix')))]",
 		"sqlDataDisksCount": 1,
 		"SQLDataPath": "F:\\SQLData",
