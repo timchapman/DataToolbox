@@ -2,337 +2,85 @@
 	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
-		"rgLocation": {
-			"type": "string",
-			"defaultValue": "eastus"
-		},
-		"rgName": {
-			"type": "string",
-			"defaultValue": "sqliaastestrg"
-		},
-		"MIrgLocation": {
-			"type": "string",
-			"defaultValue": "eastus"
-		},
-		"MIrgName": {
-			"type": "string",
-			"defaultValue": "mitestrg"
-		},
-		"virtualMachineName": {
-			"type": "String",
-			"defaultValue": "sqlvm",
-			"metadata": {
-				"description": "The name of the VM"
-			}
-		},
-		"virtualMachineSize": {
-			"type": "String",
-			"defaultValue": "Standard_D8s_v3",
-			"metadata": {
-				"description": "The virtual machine size."
-			}
-		},
-		"existingVnetResourceGroup": {
-			"type": "String",
-			"defaultValue": "[parameters('rgName')]",
-			"metadata": {
-				"description": "Specify the resrouce group of the existing VNet"
-			}
-		},
-		"imageOffer": {
-			"type": "String",
-			"defaultValue": "sql2019-ws2019",
-			"allowedValues": [
-				"sql2019-ws2019",
-				"sql2017-ws2019",
-				"SQL2017-WS2016",
-				"SQL2016SP1-WS2016",
-				"SQL2016SP2-WS2016",
-				"SQL2014SP3-WS2012R2",
-				"SQL2014SP2-WS2012R2"
-			],
-			"metadata": {
-				"description": "Windows Server and SQL Offer"
-			}
-		},
-		"sqlSku": {
-			"type": "String",
-			"defaultValue": "Standard",
-			"allowedValues": [
-				"Standard",
-				"Enterprise",
-				"SQLDEV",
-				"Web",
-				"Express"
-			],
-			"metadata": {
-				"description": "SQL Server Sku"
-			}
-		},
-		"adminUsername": {
+	
+		"SQLVMAdminUsername": {
 			"type": "String",
 			"defaultValue": "sqladmin",
 			"metadata": {
 				"description": "The admin user name of the VM"
 			}
 		},
-		"adminPassword": {
+		"SQLVMAdminPassword": {
 			"type": "SecureString",
 			"defaultValue": "Password12345!!",
 			"metadata": {
 				"description": "The admin password of the VM"
 			}
 		},
-		"storageWorkloadType": {
-			"type": "String",
-			"defaultValue": "General",
-			"allowedValues": [
-				"General",
-				"OLTP",
-				"DW"
-			],
-			"metadata": {
-				"description": "SQL Server Workload Type"
-			}
-		},
-		"sqlDataDisksCount": {
-			"type": "int",
-			"defaultValue": 1,
-			"minValue": 1,
-			"maxValue": 8,
-			"metadata": {
-				"description": "Amount of data disks (1TB each) for SQL Data files"
-			}
-		},
-		"dataPath": {
-			"type": "String",
-			"defaultValue": "F:\\SQLData",
-			"metadata": {
-				"description": "Path for SQL Data files. Please choose drive letter from F to Z, and other drives from A to E are reserved for system"
-			}
-		},
-		"sqlLogDisksCount": {
-			"type": "int",
-			"defaultValue": 1,
-			"minValue": 1,
-			"maxValue": 8,
-			"metadata": {
-				"description": "Amount of data disks (1TB each) for SQL Log files"
-			}
-		},
-		"logPath": {
-			"type": "String",
-			"defaultValue": "G:\\SQLLog",
-			"metadata": {
-				"description": "Path for SQL Log files. Please choose drive letter from F to Z and different than the one used for SQL data. Drive letter from A to E are reserved for system"
-			}
-		},
-		"location": {
-			"type": "string",
-			"defaultValue": "[parameters('rgLocation')]",
-			"metadata": {
-				"description": "Location for all resources."
-			}
-		},
-		"vnetName": {
-			"type": "string",
-			"defaultValue": "sqliaasvnet1",
-			"metadata": {
-				"description": "VNet name"
-			}
-		},
-		"vnetAddressPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.0.0/16",
-			"metadata": {
-				"description": "Address prefix"
-			}
-		},
-		"subnetPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.0.0/24",
-			"metadata": {
-				"description": "Subnet 1 Prefix"
-			}
-		},
-		"subnetName": {
-			"type": "string",
-			"defaultValue": "sqliaassubnet1",
-			"metadata": {
-				"description": "Subnet 1 Name"
-			}
-		},
-		"existingSubnetName": {
-			"type": "String",
-			"defaultValue": "[parameters('subnetName')]",
-			"metadata": {
-				"description": "Specify the name of the Subnet Name"
-			}
-		},
-		"existingVirtualNetworkName": {
-			"type": "String",
-			"defaultValue": "[parameters('vnetName')]",
-			"metadata": {
-				"description": "Specify the name of an existing VNet in the same resource group"
-			}
-		},
-		"MIRGName": {
-			"type": "string",
-			"defaultValue": "timchapmirgtest",
-			"metadata": {
-				"description": "Enter managed instance name."
-			}
-		},
-		"MIInstanceName": {
-			"type": "string",
-			"defaultValue": "sqlmidmstest",
-			"metadata": {
-				"description": "Enter managed instance name."
-			}
-		},
-		"MIadministratorLogin": {
+		"MIAdminUserName": {
 			"type": "string",
 			"defaultValue": "sqladmin",
 			"metadata": {
-				"description": "Enter user name."
+				"description": "Enter the admin user name for the Managed Instance."
 			}
 		},
-		"MIadministratorLoginPassword": {
+		"MIAdminLoginPassword": {
 			"type": "secureString",
-			"defaultValue": "ThisIsMySuperLongPassword12345!!",
+			"minLength": 16,
 			"metadata": {
-				"description": "Enter password."
+				"description": "Enter the password for the Managed Instance admin user."
 			}
-		},
-		"MIlocation": {
-			"type": "string",
-			"defaultValue": "eastus",
-			"metadata": {
-				"description": "Enter location. If you leave this field blank resource group location would be used."
-			}
-		},
-		"MIvirtualNetworkName": {
-			"type": "string",
-			"defaultValue": "SQLMI-VNET",
-			"metadata": {
-				"description": "Enter virtual network name. If you leave this field blank name will be created by the template."
-			}
-		},
-		"MIaddressPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.0.0/16",
-			"metadata": {
-				"description": "Enter virtual network address prefix."
-			}
-		},
-		"MIsubnetName": {
-			"type": "string",
-			"defaultValue": "SQLMISubnet",
-			"metadata": {
-				"description": "Enter subnet name."
-			}
-		},
-		"MIsubnetPrefix": {
-			"type": "string",
-			"defaultValue": "10.0.0.0/24",
-			"metadata": {
-				"description": "Enter subnet address prefix."
-			}
-		},
-		"MIskuName": {
-			"type": "string",
-			"defaultValue": "GP_Gen5",
-			"allowedValues": [
-				"GP_Gen5",
-				"BC_Gen5"
-			],
-			"metadata": {
-				"description": "Enter sku name."
-			}
-		},
-		"MIvCores": {
-			"type": "int",
-			"defaultValue": 16,
-			"allowedValues": [
-				8,
-				16,
-				24,
-				32,
-				40,
-				64,
-				80
-			],
-			"metadata": {
-				"description": "Enter number of vCores."
-			}
-		},
-		"MIstorageSizeInGB": {
-			"type": "int",
-			"defaultValue": 256,
-			"maxValue": 8192,
-			"minValue": 32,
-			"metadata": {
-				"description": "Enter storage size."
-			}
-		},
-		"MIlicenseType": {
-			"type": "string",
-			"defaultValue": "LicenseIncluded",
-			"allowedValues": [
-				"BasePrice",
-				"LicenseIncluded"
-			],
-			"metadata": {
-				"description": "Enter license type."
-			}
-		},
-		"DMSserviceName": {
-			"type": "string",
-			"defaultValue": "IaaStoMIDMSService",
-			"metadata": {
-				"description": "Name of the new migration service."
-			}
-		},
-		"DMSlocation": {
-			"type": "string",
-			"defaultValue": "eastus",
-			"metadata": {
-				"description": "Location where the resources will be deployed."
-			}
-		},
-		"DMSvnetName": {
-			"type": "string",
-			"defaultValue": "DMSVNet1",
-			"metadata": {
-				"description": "Name of the new virtual network."
-			}
-		},
-		"DMSsubnetName": {
-			"type": "string",
-			"defaultValue": "DMSSubnet1",
-			"metadata": {
-				"description": "Name of the new subnet associated with the virtual network."
-			}
-		}
+		}		
 	},
 	"variables": {
-		"uniquesuffix": "[uniqueString(subscription().subscriptionId, guid(subscription().subscriptionId))]"
+		"uniquesuffix": "[uniqueString(subscription().subscriptionId, guid(subscription().subscriptionId))]",
+		"rgLocation": "[resourceGroup().location]",
+		"rgName":  "[resourceGroup().name]",
+		//"MIrgLocation":  "[resourceGroup().location]",
+		"MIrgName": "[toLower(concat('mirg','-',variables('uniquesuffix')))]",
+		"virtualMachineName": "[toLower(concat('sqlvm','-',variables('uniquesuffix')))]",
+		"sqlDataDisksCount": 1,
+		"SQLDataPath": "F:\\SQLData",
+		"SQLLogDisksCount":  1,
+		"SQLLogPath":  "G:\\SQLLog",
+		"MIsubnetName": "SQLMISubnet",
+		"MIsubnetPrefix":  "10.0.0.0/24",
+		"MIskuName": "GP_Gen5",
+		"MIvCores": 16,
+		"MIstorageSizeInGB": 256,
+		"MIlicenseType": "LicenseIncluded",
+		"DMSserviceName": "IaaStoMIDMSService",
+		"DMSlocation": "[resourceGroup().location]",
+		"DMSvnetName": "DMSVNet1",
+		"DMSsubnetName": "DMSSubnet1",
+		"VMImageOffer": "sql2019-ws2019",
+		"sqlSku": "Standard",
+		"storageWorkloadType": "General",
+		"vnetName":  "sqliaasvnet1",
+		"vnetAddressPrefix": "10.0.0.0/16",
+		"subnetPrefix": "10.0.0.0/24",
+		"subnetName": "sqliaassubnet1",
+		"SQLVirtualMachineSize": "Standard_D8s_v3",
+		"MIInstanceName": "sqlmidmstest",
+		"MIlocation": "[resourceGroup().location]",
+		"MIvirtualNetworkName":"SQLMI-VNET",
+		"MIaddressPrefix": "10.0.0.0/16"
 	},
 	"resources": [
 		{
 			"type": "Microsoft.Resources/resourceGroups",
 			"apiVersion": "2018-05-01",
-			"location": "[parameters('rgLocation')]",
-			"name": "[parameters('rgName')]"
+			"location": "[variables('rgLocation')]",
+			"name": "[variables('rgName')]"
 		},
 		{
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "StorageAccountDeployment",
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/resourceGroups', parameters('rgName'))]"
+				"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
 			],
-			"resourceGroup": "[parameters('rgName')]",
+			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
 				"template": {
@@ -361,9 +109,9 @@
 			"apiVersion": "2019-10-01",
 			"name": "IaaSNetworkDeployment",
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/resourceGroups', parameters('rgName'))]"
+				"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
 			],
-			"resourceGroup": "[parameters('rgName')]",
+			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
 				"template": {
@@ -375,19 +123,19 @@
 						{
 							"type": "Microsoft.Network/virtualNetworks",
 							"apiVersion": "2020-06-01",
-							"name": "[parameters('vnetName')]",
+							"name": "[variables('vnetName')]",
 							"location": "[parameters('location')]",
 							"properties": {
 								"addressSpace": {
 									"addressPrefixes": [
-										"[parameters('vnetAddressPrefix')]"
+										"[variables('vnetAddressPrefix')]"
 									]
 								},
 								"subnets": [
 									{
-										"name": "[parameters('subnetName')]",
+										"name": "[variables('subnetName')]",
 										"properties": {
-											"addressPrefix": "[parameters('subnetPrefix')]"
+											"addressPrefix": "[variables('subnetPrefix')]"
 										}
 									}
 								]
@@ -402,9 +150,9 @@
 			"apiVersion": "2019-10-01",
 			"name": "SQLIaaSDeploymentObjects",
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/resourceGroups', parameters('rgName'))]"
+				"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
 			],
-			"resourceGroup": "[parameters('rgName')]",
+			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
 				"template": {
@@ -423,43 +171,43 @@
 								},
 								"parameters": {
 									"existingVirtualNetworkName": {
-										"value": "[parameters('vnetName')]"
+										"value": "[variables('vnetName')]"
 									},
 									"existingSubnetName": {
-										"value": "[parameters('subnetName')]"
+										"value": "[variables('subnetName')]"
 									},
 									"virtualMachineName": {
-										"value": "[parameters('virtualMachineName')]"
+										"value": "[variables('virtualMachineName')]"
 									},
 									"virtualMachineSize": {
-										"value": "[parameters('virtualMachineSize')]"
+										"value": "[variables('SQLVirtualMachineSize')]"
 									},
 									"imageOffer": {
-										"value": "[parameters('imageOffer')]"
+										"value": "[variables('VMImageOffer')]"
 									},
 									"sqlSku": {
-										"value": "[parameters('sqlSku')]"
+										"value": "[variables('sqlSku')]"
 									},
 									"adminUsername": {
-										"value": "[parameters('adminUsername')]"
+										"value": "[parameters('SQLVMAdminUsername')]"
 									},
 									"adminPassword": {
-										"value": "[parameters('adminPassword')]"
+										"value": "[parameters('SQLVMAdminPassword')]"
 									},
 									"storageWorkloadType": {
-										"value": "[parameters('storageWorkloadType')]"
+										"value": "[variables('storageWorkloadType')]"
 									},
 									"sqlDataDisksCount": {
-										"value": "[parameters('sqlDataDisksCount')]"
+										"value": "[variables('sqlDataDisksCount')]"
 									},
 									"dataPath": {
-										"value": "[parameters('dataPath')]"
+										"value": "[variables('SQLDataPath')]"
 									},
 									"sqlLogDisksCount": {
-										"value": "[parameters('sqlLogDisksCount')]"
+										"value": "[variables('sqlLogDisksCount')]"
 									},
 									"logPath": {
-										"value": "[parameters('logPath')]"
+										"value": "[variables('SQLLogPath')]"
 									}
 								}
 							}
@@ -473,9 +221,9 @@
 			"apiVersion": "2019-10-01",
 			"name": "DMSObjects",
 			"dependsOn": [
-				"[resourceId('Microsoft.Resources/resourceGroups', parameters('rgName'))]"
+				"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
 			],
-			"resourceGroup": "[parameters('rgName')]",
+			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
 				"template": {
@@ -494,16 +242,16 @@
 								},
 								"parameters": {
 									"serviceName": {
-										"value": "[parameters('DMSserviceName')]"
+										"value": "[variables('DMSserviceName')]"
 									},
 									"location": {
-										"value": "[parameters('DMSlocation')]"
+										"value": "[variables('DMSlocation')]"
 									},
 									"vnetName": {
-										"value": "[parameters('DMSvnetName')]"
+										"value": "[variables('DMSvnetName')]"
 									},
 									"subnetName": {
-										"value": "[parameters('DMSsubnetName')]"
+										"value": "[variables('DMSsubnetName')]"
 									}
 								}
 							}
@@ -516,7 +264,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "MIRGObjects",
-			"location": "[parameters('MIlocation')]",
+			"location": "[variables('MIlocation')]",
 			"properties": {
 				"mode": "Incremental",
 				"template": {
@@ -528,17 +276,17 @@
 						{
 							"type": "Microsoft.Resources/resourceGroups",
 							"apiVersion": "2018-05-01",
-							"location": "[parameters('MIlocation')]",
-							"name": "[parameters('MIrgName')]"
+							"location": "[variables('MIlocation')]",
+							"name": "[variables('MIrgName')]"
 						},
 						{
 							"type": "Microsoft.Resources/deployments",
 							"name": "MIDeploy",
 							"dependsOn": [
-								"[resourceId('Microsoft.Resources/resourceGroups', parameters('MIrgName'))]"
+								"[resourceId('Microsoft.Resources/resourceGroups', variables('MIrgName'))]"
 							],
 							"apiVersion": "2020-06-01",
-							"resourceGroup": "[parameters('MIrgName')]",
+							"resourceGroup": "[variables('MIrgName')]",
 							"properties": {
 								"mode": "Incremental",
 								"templateLink": {
@@ -546,40 +294,40 @@
 								},
 								"parameters": {
 									"managedInstanceName": {
-										"value": "[concat(parameters('MIInstanceName'), '-', variables('uniquesuffix'))]"
+										"value": "[concat(variables('MIInstanceName'), '-', variables('uniquesuffix'))]"
 									},
 									"administratorLogin": {
-										"value": "[parameters('MIadministratorLogin')]"
+										"value": "[parameters('MIAdminUserName')]"
 									},
 									"administratorLoginPassword": {
-										"value": "[parameters('MIadministratorLoginPassword')]"
+										"value": "[parameters('MIAdminLoginPassword')]"
 									},
 									"location": {
-										"value": "[parameters('MIlocation')]"
+										"value": "[variables('MIlocation')]"
 									},
 									"virtualNetworkName": {
-										"value": "[parameters('MIvirtualNetworkName')]"
+										"value": "[variables('MIvirtualNetworkName')]"
 									},
 									"addressPrefix": {
-										"value": "[parameters('MIaddressPrefix')]"
+										"value": "[variables('MIaddressPrefix')]"
 									},
 									"subnetName": {
-										"value": "[parameters('MIsubnetName')]"
+										"value": "[variables('MIsubnetName')]"
 									},
 									"subnetPrefix": {
-										"value": "[parameters('MIsubnetPrefix')]"
+										"value": "[variables('MIsubnetPrefix')]"
 									},
 									"skuName": {
-										"value": "[parameters('MIskuName')]"
+										"value": "[variables('MIskuName')]"
 									},
 									"vCores": {
-										"value": "[parameters('MIvCores')]"
+										"value": "[variables('MIvCores')]"
 									},
 									"storageSizeInGB": {
-										"value": "[parameters('MIstorageSizeInGB')]"
+										"value": "[variables('MIstorageSizeInGB')]"
 									},
 									"licenseType": {
-										"value": "[parameters('MIlicenseType')]"
+										"value": "[variables('MIlicenseType')]"
 									}
 								}
 							}
