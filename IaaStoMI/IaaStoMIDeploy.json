@@ -1,5 +1,6 @@
 {
-	"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	//"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+	"$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
 	
@@ -26,6 +27,7 @@
 		},
 		"MIAdminLoginPassword": {
 			"type": "secureString",
+			"defaultValue": "JesusFuckingChrist99!!",
 			"minLength": 16,
 			"metadata": {
 				"description": "Enter the password for the Managed Instance admin user."
@@ -33,9 +35,9 @@
 		}		
 	},
 	"variables": {
-		"uniquesuffix": "[uniqueString(subscription().subscriptionId, guid(subscription().subscriptionId))]",
-		"rgLocation": "[resourceGroup().location]",
-		"rgName":  "[resourceGroup().name]",
+		"uniquesuffix": "[uniqueString(guid(subscription().subscriptionId),subscription().subscriptionId, guid(subscription().subscriptionId))]",
+		"rgLocation": "eastus",
+		"rgName":  "timchapdms3",
 		//"MIrgLocation":  "[resourceGroup().location]",
 		"MIrgName": "[toLower(concat('mirg','-',variables('uniquesuffix')))]",
 		"virtualMachineName": "[toLower(concat('sqlvm','-',variables('uniquesuffix')))]",
@@ -50,7 +52,7 @@
 		"MIstorageSizeInGB": 256,
 		"MIlicenseType": "LicenseIncluded",
 		"DMSserviceName": "IaaStoMIDMSService",
-		"DMSlocation": "[resourceGroup().location]",
+		"DMSlocation": "[variables('rgLocation')]",
 		"DMSvnetName": "DMSVNet1",
 		"DMSsubnetName": "DMSSubnet1",
 		"VMImageOffer": "sql2019-ws2019",
@@ -61,8 +63,8 @@
 		"subnetPrefix": "10.0.0.0/24",
 		"subnetName": "sqliaassubnet1",
 		"SQLVirtualMachineSize": "Standard_D8s_v3",
-		"MIInstanceName": "[toLower(concat('sqlmidms','_',variables('uniquesuffix')))]",
-		"MIlocation": "[resourceGroup().location]",
+		"MIInstanceName": "[toLower(concat('sqlmidms',variables('uniquesuffix')))]",
+		"MIlocation": "[variables('rgLocation')]",
 		"MIvirtualNetworkName":"SQLMI-VNET",
 		"MIaddressPrefix": "10.0.0.0/16"
 	},
@@ -70,9 +72,18 @@
 		{
 			"type": "Microsoft.Resources/resourceGroups",
 			"apiVersion": "2018-05-01",
+			//"subscriptionId": "[subscription().subscriptionId]",
 			"location": "[variables('rgLocation')]",
 			"name": "[variables('rgName')]"
+		},		
+		{
+			"type": "Microsoft.Resources/resourceGroups",
+			"apiVersion": "2018-05-01",
+			//"subscriptionId": "[subscription().subscriptionId]",
+			"location": "[variables('rgLocation')]",
+			"name": "[variables('MIrgName')]"
 		},
+
 		{
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
@@ -149,9 +160,9 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "SQLIaaSDeploymentObjects",
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			],
+			//"dependsOn": [
+			//	"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
+			//],
 			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
@@ -220,9 +231,9 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "DMSObjects",
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			],
+			//"dependsOn": [
+			//	"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
+			//],
 			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
@@ -264,7 +275,7 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "MIRGObjects",
-			//"location": "[variables('MIlocation')]",
+			"location": "[variables('rgLocation')]",
 			"properties": {
 				"mode": "Incremental",
 				"template": {
@@ -273,18 +284,19 @@
 					"parameters": {},
 					"variables": {},
 					"resources": [
-						{
-							"type": "Microsoft.Resources/resourceGroups",
-							"apiVersion": "2018-05-01",
-							"location": "[variables('MIlocation')]",
-							"name": "[variables('MIrgName')]"
-						},
+		{
+			"type": "Microsoft.Resources/resourceGroups",
+			"apiVersion": "2018-05-01",
+			"location": "[variables('rgLocation')]",
+			"name": "[variables('MIrgName')]"
+		},
 						{
 							"type": "Microsoft.Resources/deployments",
 							"name": "MIDeploy",
-							"dependsOn": [
-								"[resourceId('Microsoft.Resources/resourceGroups', variables('MIrgName'))]"
-							],
+							//"location": "[variables('rgLocation')]",
+							//"dependsOn": [
+							//	"[resourceId('Microsoft.Resources/resourceGroups', variables('MIrgName'))]"
+							//],
 							"apiVersion": "2020-06-01",
 							"resourceGroup": "[variables('MIrgName')]",
 							"properties": {
@@ -294,7 +306,7 @@
 								},
 								"parameters": {
 									"managedInstanceName": {
-										"value": "[concat(variables('MIInstanceName'), '-', variables('uniquesuffix'))]"
+										"value": "[variables('MIInstanceName')]"
 									},
 									"administratorLogin": {
 										"value": "[parameters('MIAdminUserName')]"
