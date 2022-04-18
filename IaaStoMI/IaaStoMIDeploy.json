@@ -18,7 +18,7 @@
 		},
 		"SQLVMAdminPassword": {
 			"type": "SecureString",
-			"defaultValue": "[subscriptionResourceId().]",
+			
 			"metadata": {
 				"description": "The admin password of the VM"
 			}
