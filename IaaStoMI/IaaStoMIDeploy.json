@@ -3,6 +3,13 @@
 	"$schema": "https://schema.management.azure.com/schemas/2018-05-01/subscriptionDeploymentTemplate.json#",
 	"contentVersion": "1.0.0.0",
 	"parameters": {
+		"location": {
+			"type": "String",
+			"defaultValue": "eastus",
+			"metadata": {
+				"description": "The admin user name of the VM"
+			}
+		},		
 		"SQLVMAdminUsername": {
 			"type": "String",
 			"defaultValue": "sqladmin",
@@ -12,7 +19,7 @@
 		},
 		"SQLVMAdminPassword": {
 			"type": "SecureString",
-			
+			"defaultValue": "JesusFuckingChrist99!!",
 			"metadata": {
 				"description": "The admin password of the VM"
 			}
@@ -26,6 +33,7 @@
 		},
 		"MIAdminLoginPassword": {
 			"type": "secureString",
+			"defaultValue": "JesusFuckingChrist99!!",
 			"minLength": 16,
 			"metadata": {
 				"description": "Enter the password for the Managed Instance admin user."
@@ -34,7 +42,7 @@
 	},
 	"variables": {
 		"uniquesuffix": "[uniqueString(guid(subscription().subscriptionId),subscription().subscriptionId, guid(subscription().subscriptionId))]",
-		"rgLocation": ["parameters('location')"],
+		"rgLocation": "eastus",
 		"rgName":  "sqlIaaStoMIRG",
 		//"MIrgLocation":  "[resourceGroup().location]",
 		"MIrgName": "[toLower(concat('sqlmirg','-',variables('uniquesuffix')))]",
@@ -70,14 +78,12 @@
 		{
 			"type": "Microsoft.Resources/resourceGroups",
 			"apiVersion": "2018-05-01",
-			//"subscriptionId": "[subscription().subscriptionId]",
 			"location": "[variables('rgLocation')]",
 			"name": "[variables('rgName')]"
 		},		
 		{
 			"type": "Microsoft.Resources/resourceGroups",
 			"apiVersion": "2018-05-01",
-			//"subscriptionId": "[subscription().subscriptionId]",
 			"location": "[variables('rgLocation')]",
 			"name": "[variables('MIrgName')]"
 		},
