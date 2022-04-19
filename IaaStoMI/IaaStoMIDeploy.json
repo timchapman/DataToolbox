@@ -11,7 +11,7 @@
 		},
 		"SQLVMAdminPassword": {
 			"type": "SecureString",
-			"defaultValue": "ThisIsMyLongPassWord99!!",
+			//"defaultValue": "ThisIsMyLongPassWord99!!",
 			"metadata": {
 				"description": "The admin password of the VM"
 			}
@@ -25,7 +25,7 @@
 		},
 		"MIAdminLoginPassword": {
 			"type": "secureString",
-			"defaultValue": "ThisIsMyLongPassWord99!!",
+			//"defaultValue": "ThisIsMyLongPassWord99!!",
 			"minLength": 16,
 			"metadata": {
 				"description": "Enter the password for the Managed Instance admin user."
@@ -62,7 +62,7 @@
 		"subnetName": "[toLower(concat('sqlvnet','-',variables('uniquesuffix')))]",
 		"SQLVirtualMachineSize": "Standard_D8s_v3",
 		"MIInstanceName": "[toLower(concat('sqlmidms',variables('uniquesuffix')))]",
-		"MIlocation": "[resourceGroup().location]",
+		//"MIlocation": "[resourceGroup().location]",
 		"MIvirtualNetworkName":"[toLower(concat('sqlmivnet','-',variables('uniquesuffix')))]",
 		"MIaddressPrefix": "10.0.0.0/16"
 	},
