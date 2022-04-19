@@ -38,7 +38,7 @@
 		"rgName":  "[resourceGroup().name]",
 		"MIrgLocation":  "[resourceGroup().location]",
 		"MIrgName": "[resourceGroup().name]",
-		"virtualMachineName": "[toLower(concat('sqlvm','-',variables('uniquesuffix')))]",
+		"virtualMachineName": "[substring(toLower(concat('sqlvm','-',variables('uniquesuffix'))),0,15)]",
 		"sqlDataDisksCount": 1,
 		"SQLDataPath": "F:\\SQLData",
 		"SQLLogDisksCount":  1,
@@ -71,9 +71,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "StorageAccountDeployment",
-			//"dependsOn": [
-			//	"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			//],
 			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
@@ -102,9 +99,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "IaaSNetworkDeployment",
-			//"dependsOn": [
-			//	"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			//],
 			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
@@ -143,9 +137,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "SQLIaaSDeploymentObjects",
-			//"dependsOn": [
-			//	"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			//],
 			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
@@ -214,9 +205,6 @@
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "DMSObjects",
-			//"dependsOn": [
-			//	"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			//],
 			"resourceGroup": "[variables('rgName')]",
 			"properties": {
 				"mode": "Incremental",
@@ -266,17 +254,9 @@
 					"parameters": {},
 					"variables": {},
 					"resources": [
-		{
-			"type": "Microsoft.Resources/resourceGroups",
-			"apiVersion": "2018-05-01",
-			"name": "[variables('MIrgName')]"
-		},
 						{
 							"type": "Microsoft.Resources/deployments",
 							"name": "MIDeploy",
-							//"dependsOn": [
-							//	"[resourceId('Microsoft.Resources/resourceGroups', variables('MIrgName'))]"
-							//],
 							"apiVersion": "2020-06-01",
 							"resourceGroup": "[variables('MIrgName')]",
 							"properties": {
@@ -295,7 +275,7 @@
 										"value": "[parameters('MIAdminLoginPassword')]"
 									},
 									"location": {
-										"value": "[variables('MIlocation')]"
+										"value": "[variables('MIrgLocation')]"
 									},
 									"virtualNetworkName": {
 										"value": "[variables('MIvirtualNetworkName')]"
