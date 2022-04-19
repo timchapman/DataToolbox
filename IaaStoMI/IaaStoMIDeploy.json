@@ -11,7 +11,7 @@
 		},
 		"SQLVMAdminPassword": {
 			"type": "SecureString",
-			"defaultValue": "JesusFuckingChrist99!!",
+			"defaultValue": "ThisIsMyLongPassWord99!!",
 			"metadata": {
 				"description": "The admin password of the VM"
 			}
@@ -25,7 +25,7 @@
 		},
 		"MIAdminLoginPassword": {
 			"type": "secureString",
-			"defaultValue": "JesusFuckingChrist99!!",
+			"defaultValue": "ThisIsMyLongPassWord99!!",
 			"minLength": 16,
 			"metadata": {
 				"description": "Enter the password for the Managed Instance admin user."
@@ -68,19 +68,6 @@
 	},
 	"resources": [
 		{
-			"type": "Microsoft.Resources/resourceGroups",
-			"apiVersion": "2018-05-01",
-			"location": "[variables('rgLocation')]",
-			"name": "[variables('rgName')]"
-		},		
-		{
-			"type": "Microsoft.Resources/resourceGroups",
-			"apiVersion": "2018-05-01",
-			"location": "[variables('MIrgLocation')]",
-			"name": "[variables('MIrgName')]"
-		},
-
-		{
 			"type": "Microsoft.Resources/deployments",
 			"apiVersion": "2019-10-01",
 			"name": "StorageAccountDeployment",
@@ -110,237 +97,8 @@
 					]
 				}
 			}
-		},
-		{
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2019-10-01",
-			"name": "IaaSNetworkDeployment",
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			],
-			"resourceGroup": "[variables('rgName')]",
-			"properties": {
-				"mode": "Incremental",
-				"template": {
-					"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-					"contentVersion": "1.0.0.0",
-					"parameters": {},
-					"variables": {},
-					"resources": [
-						{
-							"type": "Microsoft.Network/virtualNetworks",
-							"apiVersion": "2020-06-01",
-							"name": "[variables('vnetName')]",
-							"location": "[variables('rgLocation')]",
-							"properties": {
-								"addressSpace": {
-									"addressPrefixes": [
-										"[variables('vnetAddressPrefix')]"
-									]
-								},
-								"subnets": [
-									{
-										"name": "[variables('subnetName')]",
-										"properties": {
-											"addressPrefix": "[variables('subnetPrefix')]"
-										}
-									}
-								]
-							}
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2019-10-01",
-			"name": "SQLIaaSDeploymentObjects",
-			//"dependsOn": [
-			//	"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			//],
-			"resourceGroup": "[variables('rgName')]",
-			"properties": {
-				"mode": "Incremental",
-				"template": {
-					"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-					"contentVersion": "1.0.0.0",
-					"variables": {},
-					"resources": [
-						{
-							"type": "Microsoft.Resources/deployments",
-							"name": "SQLIaaSDeployment",
-							"apiVersion": "2020-06-01",
-							"properties": {
-								"mode": "Incremental",
-								"templateLink": {
-									"uri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/quickstarts/microsoft.sqlvirtualmachine/sql-vm-new-storage/azuredeploy.json"
-								},
-								"parameters": {
-									"existingVirtualNetworkName": {
-										"value": "[variables('vnetName')]"
-									},
-									"existingSubnetName": {
-										"value": "[variables('subnetName')]"
-									},
-									"virtualMachineName": {
-										"value": "[variables('virtualMachineName')]"
-									},
-									"virtualMachineSize": {
-										"value": "[variables('SQLVirtualMachineSize')]"
-									},
-									"imageOffer": {
-										"value": "[variables('VMImageOffer')]"
-									},
-									"sqlSku": {
-										"value": "[variables('sqlSku')]"
-									},
-									"adminUsername": {
-										"value": "[parameters('SQLVMAdminUsername')]"
-									},
-									"adminPassword": {
-										"value": "[parameters('SQLVMAdminPassword')]"
-									},
-									"storageWorkloadType": {
-										"value": "[variables('storageWorkloadType')]"
-									},
-									"sqlDataDisksCount": {
-										"value": "[variables('sqlDataDisksCount')]"
-									},
-									"dataPath": {
-										"value": "[variables('SQLDataPath')]"
-									},
-									"sqlLogDisksCount": {
-										"value": "[variables('sqlLogDisksCount')]"
-									},
-									"logPath": {
-										"value": "[variables('SQLLogPath')]"
-									}
-								}
-							}
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2019-10-01",
-			"name": "DMSObjects",
-			//"dependsOn": [
-			//	"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			//],
-			"resourceGroup": "[variables('rgName')]",
-			"properties": {
-				"mode": "Incremental",
-				"template": {
-					"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-					"contentVersion": "1.0.0.0",
-					"variables": {},
-					"resources": [
-						{
-							"type": "Microsoft.Resources/deployments",
-							"name": "DMSServiceDeploy",
-							"apiVersion": "2020-06-01",
-							"properties": {
-								"mode": "Incremental",
-								"templateLink": {
-									"uri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/quickstarts/microsoft.datamigration/azure-database-migration-simple-deploy/azuredeploy.json"
-								},
-								"parameters": {
-									"serviceName": {
-										"value": "[variables('DMSserviceName')]"
-									},
-									"location": {
-										"value": "[variables('DMSlocation')]"
-									},
-									"vnetName": {
-										"value": "[variables('DMSvnetName')]"
-									},
-									"subnetName": {
-										"value": "[variables('DMSsubnetName')]"
-									}
-								}
-							}
-						}
-					]
-				}
-			}
-		},
-		{
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2019-10-01",
-			"name": "MIRGObjects",
-			"properties": {
-				"mode": "Incremental",
-				"template": {
-					"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-					"contentVersion": "1.0.0.0",
-					"parameters": {},
-					"variables": {},
-					"resources": [
-		{
-			"type": "Microsoft.Resources/resourceGroups",
-			"apiVersion": "2018-05-01",
-			"name": "[variables('MIrgName')]"
-		},
-						{
-							"type": "Microsoft.Resources/deployments",
-							"name": "MIDeploy",
-							//"dependsOn": [
-							//	"[resourceId('Microsoft.Resources/resourceGroups', variables('MIrgName'))]"
-							//],
-							"apiVersion": "2020-06-01",
-							"resourceGroup": "[variables('MIrgName')]",
-							"properties": {
-								"mode": "Incremental",
-								"templateLink": {
-									"uri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/quickstarts/microsoft.sql/sqlmi-new-vnet/azuredeploy.json"
-								},
-								"parameters": {
-									"managedInstanceName": {
-										"value": "[variables('MIInstanceName')]"
-									},
-									"administratorLogin": {
-										"value": "[parameters('MIAdminUserName')]"
-									},
-									"administratorLoginPassword": {
-										"value": "[parameters('MIAdminLoginPassword')]"
-									},
-									"location": {
-										"value": "[variables('MIlocation')]"
-									},
-									"virtualNetworkName": {
-										"value": "[variables('MIvirtualNetworkName')]"
-									},
-									"addressPrefix": {
-										"value": "[variables('MIaddressPrefix')]"
-									},
-									"subnetName": {
-										"value": "[variables('MIsubnetName')]"
-									},
-									"subnetPrefix": {
-										"value": "[variables('MIsubnetPrefix')]"
-									},
-									"skuName": {
-										"value": "[variables('MIskuName')]"
-									},
-									"vCores": {
-										"value": "[variables('MIvCores')]"
-									},
-									"storageSizeInGB": {
-										"value": "[variables('MIstorageSizeInGB')]"
-									},
-									"licenseType": {
-										"value": "[variables('MIlicenseType')]"
-									}
-								}
-							}
-						}
-					]
-				}
-			}
 		}
+		
 	],
 	"outputs": {}
 }
