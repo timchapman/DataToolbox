@@ -68,36 +68,18 @@
 	},
 	"resources": [
 		{
-			"type": "Microsoft.Resources/deployments",
-			"apiVersion": "2019-10-01",
-			"name": "StorageAccountDeployment",
-			"dependsOn": [
-				"[resourceId('Microsoft.Resources/resourceGroups', variables('rgName'))]"
-			],
-			"resourceGroup": "[variables('rgName')]",
-			"properties": {
-				"mode": "Incremental",
-				"template": {
-					"$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-					"contentVersion": "1.0.0.0",
-					"parameters": {},
-					"variables": {},
-					"resources": [
-						{
-							"type": "Microsoft.Storage/storageAccounts",
-							"apiVersion": "2021-06-01",
-							"name": "[substring(toLower(concat('dmsstorageaccount', variables('uniquesuffix'))),0,22)]",
-							"location": "eastus",
-							"sku": {
-								"name": "Standard_LRS"
-							},
-							"kind": "StorageV2",
-							"properties": {}
-						}
-					]
-				}
-			}
+
+			"type": "Microsoft.Storage/storageAccounts",
+			"apiVersion": "2021-06-01",
+			"name": "[substring(toLower(concat('dmsstorageaccount', variables('uniquesuffix'))),0,22)]",
+			"location": "[variables('rgLocation')]",
+			"sku": {
+			"name": "Standard_LRS"
+			},
+			"kind": "StorageV2",
+			"properties": {}
 		}
+
 		
 	],
 	"outputs": {}
