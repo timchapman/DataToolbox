@@ -78,6 +78,27 @@
 			},
 			"kind": "StorageV2",
 			"properties": {}
+		},
+		{
+			"type": "Microsoft.Network/virtualNetworks",
+			"apiVersion": "2020-06-01",
+			"name": "[variables('vnetName')]",
+			"location": "[variables('rgLocation')]",
+			"properties": {
+				"addressSpace": {
+					"addressPrefixes": [
+						"[variables('vnetAddressPrefix')]"
+					]
+				},
+				"subnets": [
+					{
+						"name": "[variables('subnetName')]",
+						"properties": {
+							"addressPrefix": "[variables('subnetPrefix')]"
+						}
+					}
+				]
+			}
 		}
 
 		
