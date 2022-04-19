@@ -83,7 +83,7 @@
 						{
 							"type": "Microsoft.Storage/storageAccounts",
 							"apiVersion": "2021-06-01",
-							"name": "[toLower(concat('dmssa', '-',variables('uniquesuffix')))]",
+							"name": "[toLower(concat('dmssa',variables('uniquesuffix')))]",
 							"location": "[variables('rgLocation')]",
 							"sku": {
 								"name": "Standard_LRS"
