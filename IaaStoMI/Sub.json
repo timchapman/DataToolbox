@@ -7,24 +7,25 @@
     },
 	"rgName2": {
       "type": "string"
+    }, 
+	"location":{
+      "type": "string",
+	  "defaultValue": "East US"
     }
-  },
-  "variables": {
-	  "location": "[resourceGroup().location]"
-	  },
+  }
   "resources": [
     {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2021-04-01",
       "name": "[parameters('rgName1')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('location')]",
       "properties": {}
     },
 	    {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2021-04-01",
       "name": "[parameters('rgName2')]",
-      "location": "[variables('location')]",
+      "location": "[parameters('location')]",
       "properties": {}
     }
   ],
