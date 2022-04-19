@@ -12,7 +12,7 @@
       "type": "string",
 	  "defaultValue": "East US"
     }
-  }
+  },
   "resources": [
     {
       "type": "Microsoft.Resources/resourceGroups",
