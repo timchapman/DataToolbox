@@ -33,7 +33,7 @@
 		}		
 	},
 	"variables": {
-		"uniquesuffix": "[uniqueString(guid(subscription().subscriptionId),subscription().subscriptionId, guid(subscription().subscriptionId))]",
+		"uniquesuffix": "[uniqueString(guid(subscription().subscriptionId),uniquestring(resourceGroup().id), guid(resourceGroup().id))]",
 		"rgLocation": "[resourceGroup().location]",
 		"rgName":  "[resourceGroup().name]",
 		"MIrgLocation":  "[resourceGroup().location]",
