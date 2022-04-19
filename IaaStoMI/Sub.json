@@ -9,8 +9,7 @@
       "type": "string"
     }, 
 	"location":{
-      "type": "string",
-	  "defaultValue": "East US"
+      "type": "string"
     }
   },
   "resources": [
